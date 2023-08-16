@@ -2,6 +2,8 @@ from pythonosc.dispatcher import Dispatcher
 from pythonosc.osc_server import BlockingOSCUDPServer
 from escpos.printer import Usb
 import os
+from unidecode import unidecode
+import time
 
 # Specify the USB vendor ID, product ID, and endpoint addresses
 vendor_id = 0x0456
@@ -12,7 +14,9 @@ out_endpoint = 0x03
 # Connect to the USB printer
 p = Usb(vendor_id, product_id, 0, in_endpoint, out_endpoint)
 
-
+def remove_special_chars(s):
+  cleaned = s.replace("¿","").replace("¡","")
+  return unidecode(cleaned)
 def get_max_chars_per_line():
     try:
         _,columns = os.get_terminal_size()
@@ -74,23 +78,27 @@ def print_handler(address, *args):
     poem_file = "text.txt"
     with open(poem_file, 'r') as file:
     	lines = [line.strip() for line in file if line.strip()]
-    lines = " ".join(lines) 
-    orig_len_lines = len(lines)   
+    lines = " ".join(lines)
+    lines = remove_special_chars(lines)
+    orig_len_lines = len(lines)  
+    to_print = "" 
     #lines = center_pad_string(lines,max_chars)
     if edades_contempladas <= new_value:
        #print("caso edades_contempladas < new_value")
-       to_print = center_pad_string(lines[edades_contempladas:new_value])
+       to_print = center_pad_string(lines[edades_contempladas:new_value])+'\n'
     else:
        #print("caso edades_contempladas > new_value")
-       to_print = center_pad_string(lines[edades_contempladas:new_value+edades_contempladas])
+       to_print = center_pad_string(lines[edades_contempladas:new_value+edades_contempladas])+'\n'
     
     edades_contempladas += new_value
     if edades_contempladas >= orig_len_lines:
        #print("reset")
        edades_contempladas=0
+    time.sleep(1.5)
     print(to_print)
-    #esto es lo que hace que la impresora imprima
-    print(f"{address}: {args}", to_print )
+    print(p.text(str(to_print)))
+    #debug print vvvvvvvvvvvv
+    #print(f"{address}: {args}", to_print )
     #print(lines)
     #print(f"{address}: {args}", p.text(line ))
     #print(f"{address}: {args}", p.text(line ))

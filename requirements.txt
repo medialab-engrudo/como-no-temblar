@@ -96,6 +96,8 @@ tornado @ file:///home/conda/feedstock_root/build_artifacts/tornado_168415020929
 traitlets @ file:///home/conda/feedstock_root/build_artifacts/traitlets_1675110562325/work
 typing-utils @ file:///home/conda/feedstock_root/build_artifacts/typing_utils_1622899189314/work
 typing_extensions @ file:///home/conda/feedstock_root/build_artifacts/typing_extensions_1685704949284/work
+unicode==2.9
+Unidecode==1.3.6
 wcwidth @ file:///home/conda/feedstock_root/build_artifacts/wcwidth_1673864653149/work
 webencodings==0.5.1
 websocket-client @ file:///home/conda/feedstock_root/build_artifacts/websocket-client_1684708148666/work
